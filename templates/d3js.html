@@ -1,0 +1,23 @@
+{%extends 'base.html'%} {%block title%} World Map |{%endblock title%}
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css"
+  rel="stylesheet"
+/>
+
+{%block body%}
+<div id="map" style="width: 100vw; height: 100vh"></div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
+<script>
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoiaGFycnkxMjM0OTgiLCJhIjoiY2s4OXh1c3BqMGFsZzNvbXA3YmYyaGFhYSJ9.wmVMiMxlSqpzJPsj-UXr3Q";
+  var map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/dark-v10",
+    zoom: 1,
+    center: [0, 20],
+  });
+</script>
+
+<script src="/static/js/index.js"></script>
+{%endblock body%}
