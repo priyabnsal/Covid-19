@@ -1,4 +1,4 @@
-{%extends 'base.html'%} {%block title%} About | {%endblock title%} 
+{%extends 'base.html'%} {%block title%} predict | {%endblock title%} 
 {%block body%}
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -21,7 +21,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a class="btn btn-primary" href="/results" role="button">View DB</a>
+                <a class="btn btn-primary" href="#" role="button">View DB</a>
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@
         e.preventDefault();
         $.ajax({
             type:'POST',
-            url:'{% url "home:submit_prediction" %}',
+            {% comment %} url:'{% url "home:submit_prediction" %}', {% endcomment %}
             data:{
                 sepal_length:$('#sepal_length').val(),
                 sepal_width:$('#sepal_width').val(),

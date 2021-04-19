@@ -11,10 +11,29 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import matplotlib.pyplot as plt
 # %matplotlib inline
-import pandas as pd
+# import pandas as pd
+# import time
+
+import numpy as np 
+import matplotlib.pyplot as plt 
+import matplotlib.colors as mcolors
+import pandas as pd 
+import random
+import math
 import time
-
-
+from sklearn.linear_model import LinearRegression, BayesianRidge
+from sklearn.model_selection import RandomizedSearchCV, train_test_split
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.svm import SVR
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+import datetime
+import operator 
+# plt.style.use('fivethirtyeight')
+# %matplotlib inline
+from IPython.display import set_matplotlib_formats
+# set_matplotlib_formats('retina')
+import warnings
+# warnings.filterwarnings("ignore")
 # Create your views here.
 
 def greetings(request):
@@ -37,33 +56,31 @@ def search(request):
         print("url :",url)
         print("driver start")
         # driver = webdriver.Chrome(r'C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe')
-        driver = webdriver.Chrome(r"C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe")
-        # C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe
-        # driver = webdriver.Chrome(ChromeDriverManager().install())
-        # driver = webdriver.Chrome()
-        print("driver 1")
+        # driver = webdriver.Chrome(r"C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe")
+        # # C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe
+        # # driver = webdriver.Chrome(ChromeDriverManager().install())
+        # # driver = webdriver.Chrome()
+        # print("driver 1")
 
-        driver.maximize_window()
-        print("driver 2 window")
+        # driver.maximize_window()
+        # print("driver 2 window")
 
-        driver.get(url)
-        # driver.get("https://www.covid19india.org/state/DL")
+        # driver.get(url)
+        # # driver.get("https://www.covid19india.org/state/DL")
 
-        print("driver 3 url")
+        # print("driver 3 url")
 
-        time.sleep(6)
-        print("driver in sriver")
+        # time.sleep(6)
+        # print("driver in sriver")
 
-        map_div = driver.find_element(By.ID,"chart")
-        print("driver MAP")
-        cases_div = driver.find_element(By.CLASS_NAME,"bar")
-        
+        # map_div = driver.find_element(By.ID,"chart")
+        # print("driver MAP")
 
-        html_code = map_div.get_attribute('outerHTML')
-        print("driver in driver dexcodf")
+        # html_code = map_div.get_attribute('outerHTML')
+        # print("driver in driver dexcodf")
 
-        driver.quit()
-        print("driver end")
+        # driver.quit()
+        # print("driver end")
 
         # right hand side portion
 
@@ -109,7 +126,9 @@ def search(request):
         fig = plot.get_figure()
         fig.savefig("static/images/output.png")
 
-        res = render(request,'home.html',{"html_code":html_code,"state_name":state_name,"total_state_data":total_state_data,"img_name":"output.png"})
+        res = render(request,'home.html',{"state_name":state_name,"total_state_data":total_state_data,"img_name":"output.png"})
+
+        # res = render(request,'home.html',{"html_code":html_code,"state_name":state_name,"total_state_data":total_state_data,"img_name":"output.png"})
         return res
 
 
@@ -156,25 +175,125 @@ def d3js(request):
     return render(request, 'd3js.html')
 
 def predict(request):
-     if request.POST.get('action') == 'post':
+    plt.style.use('fivethirtyeight')
+    set_matplotlib_formats('retina')
+    warnings.filterwarnings("ignore")
 
-        # Receive data from client
-        sepal_length = float(request.POST.get('sepal_length'))
-        sepal_width = float(request.POST.get('sepal_width'))
-        petal_length = float(request.POST.get('petal_length'))
-        petal_width = float(request.POST.get('petal_width'))
+    confirmed_df = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv')
+    deaths_df = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv')
+    recoveries_df = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv')
+    latest_data = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-11-2021.csv')
+    
+    latest_data.head()
+    confirmed_df.head()
+    print(latest_data.head())
+    print(confirmed_df.head())
 
-        # Unpickle model
-        model = pd.read_pickle(r"C:\Users\azander\Downloads\new_model.pickle")
-        # Make prediction
-        result = model.predict([[sepal_length, sepal_width, petal_length, petal_width]])
+    cols = confirmed_df.keys()
 
-        classification = result[0]
+    confirmed = confirmed_df.loc[:, cols[4]:cols[-1]]
+    deaths = deaths_df.loc[:, cols[4]:cols[-1]]
+    recoveries = recoveries_df.loc[:, cols[4]:cols[-1]]
 
-        PredResults.objects.create(sepal_length=sepal_length, sepal_width=sepal_width, petal_length=petal_length,
-                                   petal_width=petal_width, classification=classification)
+    dates = confirmed.keys()
+world_cases = []
+total_deaths = [] 
+mortality_rate = []
+recovery_rate = [] 
+total_recovered = [] 
+total_active = [] 
 
-        return JsonResponse({'result': classification, 'sepal_length': sepal_length,
-                             'sepal_width': sepal_width, 'petal_length': petal_length, 'petal_width': petal_width},
-                            safe=False)
+for i in dates:
+    confirmed_sum = confirmed[i].sum()
+    death_sum = deaths[i].sum()
+    recovered_sum = recoveries[i].sum()
+    
+    # confirmed, deaths, recovered, and active
+    world_cases.append(confirmed_sum)
+    total_deaths.append(death_sum)
+    total_recovered.append(recovered_sum)
+    total_active.append(confirmed_sum-death_sum-recovered_sum)
+    
+    # calculate rates
+    mortality_rate.append(death_sum/confirmed_sum)
+    recovery_rate.append(recovered_sum/confirmed_sum)
+
+
+    def daily_increase(data):
+        d = [] 
+    for i in range(len(data)):
+        if i == 0:
+            d.append(data[0])
+        else:
+            d.append(data[i]-data[i-1])
+    return d 
+
+def moving_average(data, window_size):
+    moving_average = []
+    for i in range(len(data)):
+        if i + window_size < len(data):
+            moving_average.append(np.mean(data[i:i+window_size]))
+        else:
+            moving_average.append(np.mean(data[i:len(data)]))
+    return moving_average
+
+# window size
+window = 7
+
+# confirmed cases
+world_daily_increase = daily_increase(world_cases)
+world_confirmed_avg= moving_average(world_cases, window)
+world_daily_increase_avg = moving_average(world_daily_increase, window)
+
+# deaths
+world_daily_death = daily_increase(total_deaths)
+world_death_avg = moving_average(total_deaths, window)
+world_daily_death_avg = moving_average(world_daily_death, window)
+
+
+# recoveries
+world_daily_recovery = daily_increase(total_recovered)
+world_recovery_avg = moving_average(total_recovered, window)
+world_daily_recovery_avg = moving_average(world_daily_recovery, window)
+
+
+# active 
+world_active_avg = moving_average(total_active, window)
+
+
+days_since_1_22 = np.array([i for i in range(len(dates))]).reshape(-1, 1)
+world_cases = np.array(world_cases).reshape(-1, 1)
+total_deaths = np.array(total_deaths).reshape(-1, 1)
+total_recovered = np.array(total_recovered).reshape(-1, 1)
+
+
+days_in_future = 10
+future_forcast = np.array([i for i in range(len(dates)+days_in_future)]).reshape(-1, 1)
+adjusted_dates = future_forcast[:-10]
+
+start = '1/22/2020'
+start_date = datetime.datetime.strptime(start, '%m/%d/%Y')
+future_forcast_dates = []
+for i in range(len(future_forcast)):
+    future_forcast_dates.append((start_date + datetime.timedelta(days=i)).strftime('%m/%d/%Y'))
+
+    # slightly modify the data to fit the model better (regression models cannot pick the pattern)
+X_train_confirmed, X_test_confirmed, y_train_confirmed, y_test_confirmed = train_test_split(days_since_1_22[50:], world_cases[50:], test_size=0.02, shuffle=False) 
+
+# svm_confirmed = svm_search.best_estimator_
+svm_confirmed = SVR(shrinking=True, kernel='poly',gamma=0.01, epsilon=1,degree=3, C=0.1)
+svm_confirmed.fit(X_train_confirmed, y_train_confirmed)
+svm_pred = svm_confirmed.predict(future_forcast)
+
+
+# check against testing data
+svm_test_pred = svm_confirmed.predict(X_test_confirmed)
+plt.plot(y_test_confirmed)
+plt.plot(svm_test_pred)
+plt.legend(['Test Data', 'SVM Predictions'])
+print('MAE:', mean_absolute_error(svm_test_pred, y_test_confirmed))
+print('MSE:',mean_squared_error(svm_test_pred, y_test_confirmed))
+
+    return render(request, 'predict.html')
+     
 

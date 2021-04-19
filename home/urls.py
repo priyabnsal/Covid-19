@@ -5,10 +5,11 @@ from home import views
 urlpatterns = [
     # url(r'^home/$',views.greetings),
     # url(r'^home/search$',views.search),
-    path('', views.greetings),
+    path('', views.index, name='home'),
+
+    path('greetings', views.greetings, name='greetings'),
     path('search', views.search),
 
-    path('index', views.index, name='home'),
     path('about', views.about, name='about'),
     path('services', views.services, name='services'),
     path('contact', views.contact, name='contact'),
