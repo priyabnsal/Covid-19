@@ -33,7 +33,7 @@
     <script src="{% static 'js/mapdata.js' %}" type="text/javascript"></script>
     <title>Covid 19</title>
   </head>
-  <body>
+  <body onload="fetch()">
     <div class="container-fluid px-0">
       {% comment %}
       <div class="row" style="background-color: #ff6347">
@@ -131,6 +131,8 @@
               <div class="col-sm-10">
                 <input
                   class="form-control"
+                  id="myInput"
+                  onkeyup="myFunction()"
                   type="search"
                   name="search_text"
                   placeholder="Search"
@@ -162,35 +164,168 @@
           </div>
           {% comment %} {% endif %} {% endcomment %}
         </div>
-        <div class="col-sm-6">
-          {% if img_name %}
-          <table
-            class="table table-striped"
-            style="margin-top: 30px; margin-left: 120px"
-          >
-            <thead>
+        <div class="col-sm-8">
+          <!-- <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."> -->
+          <div class="container-fluid table-responsive my-4">
+            <h3 class="text-center text-uppercase">
+              Covid-19 Live Tracker World
+            </h3>
+            <table
+              class="table table-bordered table-striped text-center"
+              id="tbval"
+            >
               <tr>
-                <th>Confirmed</th>
-                <th>Recovered</th>
-                <th>Death</th>
+                <th>States</th>
+                <th>Total Confirmed</th>
+                <th>Total Recovered</th>
+                <th>Total Deaths</th>
                 <th>Active</th>
+                <!-- <th>New Deaths</th> -->
               </tr>
-            </thead>
-            <tbody>
-              {% for key,value in total_state_data.iterrows %}
-              <tr>
-                <td>{{value.cf_Confirmed}}</td>
-                <td>{{value.cf_Recovered}}</td>
-                <td>{{value.cf_Deceased}}</td>
-                <td>{{value.cf_Active}}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+            </table>
+          </div>
+          {% if img_name %}
           <img src="/static/images/output.png" alt="not found" width="1000px" />
           {% endif %}
         </div>
       </div>
     </div>
+    <input
+      type="text"
+      id="myInput"
+      onkeyup="myFunction()"
+      placeholder="Search for names.."
+    />
+    <div class="container-fluid table-responsive my-4">
+      <h3 class="text-center text-uppercase">Covid-19 Live Tracker World</h3>
+      <table class="table table-bordered table-striped text-center" id="tbval">
+        <tr>
+          <th>States</th>
+          <th>Total Confirmed</th>
+          <th>Total Recovered</th>
+          <th>Total Deaths</th>
+          <th>Active</th>
+          <!-- <th>New Deaths</th> -->
+        </tr>
+      </table>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      function fetch() {
+        $.get("https://api.covid19india.org/data.json", function (data) {
+          // console.log(data["statewise"].length);
+          var tbval = document.getElementById("tbval");
+          for (var i = 1; i < data["statewise"].length; i++) {
+            var x = tbval.insertRow();
+            x.insertCell(0);
+            tbval.rows[i].cells[0].innerHTML =
+              data["statewise"][i - 1]["state"];
+            tbval.rows[i].cells[0].style.background = "#7a4a91";
+            tbval.rows[i].cells[0].style.color = "#fff";
+
+            x.insertCell(1);
+            tbval.rows[i].cells[1].innerHTML =
+              data["statewise"][i - 1]["confirmed"];
+            tbval.rows[i].cells[1].style.background = "#7a4a91";
+            tbval.rows[i].cells[1].style.color = "#fff";
+
+            x.insertCell(2);
+            tbval.rows[i].cells[2].innerHTML =
+              data["statewise"][i - 1]["recovered"];
+            tbval.rows[i].cells[2].style.background = "#7a4a91";
+            tbval.rows[i].cells[2].style.color = "#fff";
+
+            x.insertCell(3);
+            tbval.rows[i].cells[3].innerHTML =
+              data["statewise"][i - 1]["deaths"];
+            tbval.rows[i].cells[3].style.background = "#7a4a91";
+            tbval.rows[i].cells[3].style.color = "#fff";
+
+            x.insertCell(4);
+            tbval.rows[i].cells[4].innerHTML =
+              data["statewise"][i - 1]["active"];
+            tbval.rows[i].cells[4].style.background = "#7a4a91";
+            tbval.rows[i].cells[4].style.color = "#fff";
+
+            // x.insertCell(5);
+            // tbval.rows[i].cells[5].innerHTML =
+            //   data["statewise"][i - 1]["NewDeaths"];
+            // tbval.rows[i].cells[5].style.background = "#7a4a91";
+            // tbval.rows[i].cells[5].style.color = "#fff";
+          }
+        });
+      }
+    </script>
+    <script>
+      function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tbval");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+    </script>
+    <script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+<canvas id="myChart" style="width:100%;max-width:700px">
+
+<script>
+var xValues = [100,200,300,400,500,600,700,800,900,1000];
+
+new Chart("myChart", {
+  type: "line",
+  data: {
+    labels: xValues,
+    datasets: [{ 
+      data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478],
+      borderColor: "red",
+      fill: false
+    }, { 
+      data: [1600,1700,1700,1900,2000,2700,4000,5000,6000,7000],
+      borderColor: "green",
+      fill: false
+    }, { 
+      data: [300,700,2000,5000,6000,4000,2000,1000,200,100],
+      borderColor: "blue",
+      fill: false
+    }]
+  },
+  options: {
+    legend: {display: false}
+  }
+});
+</script>
+</canvas>
   </body>
 </html>

@@ -385,7 +385,9 @@ def predict(request):
         
     # country_visualizations('India')
     
-
+    # Future predictions using SVM 
+    svm_df = pd.DataFrame({'Date': future_forcast_dates[-10:], 'SVM Predicted # of Confirmed Cases Worldwide': np.round(svm_pred[-10:])})
+    svm_df.style.background_gradient(cmap='Reds')
     return render(request, 'predict.html')
      
 

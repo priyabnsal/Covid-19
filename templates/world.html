@@ -1,27 +1,264 @@
-{%extends 'base.html'%} {%block title%} World | {%endblock title%} 
-<link
-  href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css"
-  rel="stylesheet"
-/>
-<link href="/static/1css/dark.css" rel="stylesheet" />
-{%block body%}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
 
-<div class="flexbox">
-  {% comment %} <div id="chartdiv"></div> {% endcomment %}
-  <div id="map" style="width: 100vw; height: 100vh"></div>
-  <div id="list">
-    <table id="areas" class="compact hover order-column row-border">
-      <thead>
-        <tr>
-          <th>Country/State</th>
-          <th>Confirmed</th>
-          <th>Deaths</th>
-          <th>Recovered</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+
+    <title>Covid tracker</title>
+    {% load static %}
+    <link rel="stylesheet" href="/static/css/world.css" />
+    <script src="/static/js/world.js"></script>
+  </head>
+  <body onload="fetch()">
+    <nav
+      style="background-color: #e3f2fd"
+      class="navbar navbar-expand-lg navbar-light"
+    >
+      <a class="navbar-brand" href="/">Logo</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/"
+              >Home <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/d3js">World</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/greetings">India</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/predict">Predict</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/symptoms">Symptoms</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href=""
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Services
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="/services">World Map</a>
+              <a class="dropdown-item" href="/greetings">India</a>
+              <a class="dropdown-item" href="#">SIR Model</a>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/world">World</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact Us</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">LogOut</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"> Hi {{ user.username }}!</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+<div class="container my-4" >
+  <div class="row d-flex flex-row">
+    <div class="col-xl-3 col-md-3 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Confirmed</div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="box"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fa fa-users fa-2x text-info"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="col-xl-3 col-md-3 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Death</div>
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id='td'></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fa fa-bed fa-2x text-danger"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="col-xl-3 col-md-3 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Recovered</div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="tr"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fa fa-child fa-2x text-success"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-md-3 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">New Confirmed</div>
+                                            <div class="row no-gutters align-items-center">
+                                            <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"id="nc"></div>
+                                                </div>
+                                                                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa fa-bell fa-2x text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+    </div>             
 </div>
-<script src="static/js/app.js"></script>
-{%endblock body%}
+</div>
+    <div class="container-fluid table-responsive my-4">
+      <h3 class="text-center text-uppercase"> Covid-19 Live Tracker World</h3>
+      <table class="table table-bordered table-striped text-center" id="tbval">
+        <tr>
+          <th>Country</th>
+          <th>Total Confirmed</th>
+          <th>Total Recovered</th>
+          <th>Total Deaths</th>
+          <th>New Recovered</th>
+          <th>New Deaths</th>
+        </tr>
+      </table>
+    </div>
+
+    {% comment %}
+    <div class="preloader"></div>
+    {% endcomment %}
+
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function fetch(){
+      $.get("https://api.covid19api.com/summary",
+      function(data){
+        console.log(data['Countries'].length);
+        var tbval = document.getElementById('tbval');
+        var box = document.getElementById('box').innerHTML =data['Global']['TotalConfirmed'];
+        var td = document.getElementById('td').innerHTML =data['Global']['TotalDeaths'];
+        var tr = document.getElementById('tr').innerHTML =data['Global']['TotalRecovered'];
+        var nc = document.getElementById('nc').innerHTML =data['Global']['NewConfirmed'];
+        
+        console.log(data['Global']['TotalConfirmed']);
+        for(var i=1; i<(data['Countries'].length);i++){
+            var x =tbval.insertRow();
+            x.insertCell(0);
+            tbval.rows[i].cells[0].innerHTML = data['Countries'][i-1]['Country'];
+            tbval.rows[i].cells[0].style.background = '#7a4a91';
+            tbval.rows[i].cells[0].style.color = '#fff';
+
+            x.insertCell(1);
+            tbval.rows[i].cells[1].innerHTML = data['Countries'][i-1]['TotalConfirmed'];
+            tbval.rows[i].cells[1].style.background = '#7a4a91';
+            tbval.rows[i].cells[1].style.color = '#fff';
+
+            x.insertCell(2);
+            tbval.rows[i].cells[2].innerHTML = data['Countries'][i-1]['TotalRecovered'];
+            tbval.rows[i].cells[2].style.background = '#7a4a91';
+            tbval.rows[i].cells[2].style.color = '#fff';
+
+            x.insertCell(3);
+            tbval.rows[i].cells[3].innerHTML = data['Countries'][i-1]['TotalDeaths'];
+            tbval.rows[i].cells[3].style.background = '#7a4a91';
+            tbval.rows[i].cells[3].style.color = '#fff';
+
+            x.insertCell(4);
+            tbval.rows[i].cells[4].innerHTML = data['Countries'][i-1]['NewRecovered'];
+            tbval.rows[i].cells[4].style.background = '#7a4a91';
+            tbval.rows[i].cells[4].style.color = '#fff';
+
+            x.insertCell(5);
+            tbval.rows[i].cells[5].innerHTML = data['Countries'][i-1]['NewDeaths'];
+            tbval.rows[i].cells[5].style.background = '#7a4a91';
+            tbval.rows[i].cells[5].style.color = '#fff';
+
+        }
+      }
+      );
+    }
+</script>
+
+  </body>
+</html>
