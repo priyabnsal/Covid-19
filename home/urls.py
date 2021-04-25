@@ -17,6 +17,9 @@ urlpatterns = [
     path('logout', views.logoutuser, name='logout'),
     path('d3js', views.d3js, name='d3js'),
     path('predict', views.predict, name='predict'),
+    path('world', views.world, name='world'),
+    path('symptoms', views.symptoms, name='symptoms'),
+
 
      
 

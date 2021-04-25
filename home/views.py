@@ -15,7 +15,9 @@ import matplotlib.pyplot as plt
 # import time
 
 import numpy as np 
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt, mpld3
+import matplotlib.pyplot as plt
+
 import matplotlib.colors as mcolors
 import pandas as pd 
 import random
@@ -41,8 +43,10 @@ def greetings(request):
     return res
 def index(request):
     return render(request, 'index.html')
+
 def about(request):
     return render(request, 'about.html')
+
 def search(request):
     if request.method == 'POST':
         state_name = request.POST['search_text'].capitalize()
@@ -55,34 +59,7 @@ def search(request):
         print("state code :",state_code)
         print("url :",url)
         print("driver start")
-        # driver = webdriver.Chrome(r'C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe')
-        # driver = webdriver.Chrome(r"C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe")
-        # # C:\Users\Priya Bansal\OneDrive\Desktop\chromedriver.exe
-        # # driver = webdriver.Chrome(ChromeDriverManager().install())
-        # # driver = webdriver.Chrome()
-        # print("driver 1")
-
-        # driver.maximize_window()
-        # print("driver 2 window")
-
-        # driver.get(url)
-        # # driver.get("https://www.covid19india.org/state/DL")
-
-        # print("driver 3 url")
-
-        # time.sleep(6)
-        # print("driver in sriver")
-
-        # map_div = driver.find_element(By.ID,"chart")
-        # print("driver MAP")
-
-        # html_code = map_div.get_attribute('outerHTML')
-        # print("driver in driver dexcodf")
-
-        # driver.quit()
-        # print("driver end")
-
-        # right hand side portion
+        
 
         state_wise_daily = pd.read_csv("state_wise_daily.csv")
         
@@ -169,10 +146,15 @@ def contact(request):
         contact.save();
     messages.success(request, 'Message send successfully')
 
-    return render(request, 'contact.html')
+    return render(request,'contact.html')
 
 def d3js(request):
-    return render(request, 'd3js.html')
+    return render(request,'d3js.html')
+def world(request):
+    return render(request,'world.html')
+def symptoms(request):
+    return render(request,'symptoms.html')
+    
 
 def predict(request):
     plt.style.use('fivethirtyeight')
@@ -196,103 +178,213 @@ def predict(request):
     recoveries = recoveries_df.loc[:, cols[4]:cols[-1]]
 
     dates = confirmed.keys()
-world_cases = []
-total_deaths = [] 
-mortality_rate = []
-recovery_rate = [] 
-total_recovered = [] 
-total_active = [] 
+    world_cases = []
+    total_deaths = [] 
+    mortality_rate = []
+    recovery_rate = [] 
+    total_recovered = [] 
+    total_active = [] 
 
-for i in dates:
-    confirmed_sum = confirmed[i].sum()
-    death_sum = deaths[i].sum()
-    recovered_sum = recoveries[i].sum()
-    
-    # confirmed, deaths, recovered, and active
-    world_cases.append(confirmed_sum)
-    total_deaths.append(death_sum)
-    total_recovered.append(recovered_sum)
-    total_active.append(confirmed_sum-death_sum-recovered_sum)
-    
-    # calculate rates
-    mortality_rate.append(death_sum/confirmed_sum)
-    recovery_rate.append(recovered_sum/confirmed_sum)
+    for i in dates:
+        confirmed_sum = confirmed[i].sum()
+        death_sum = deaths[i].sum()
+        recovered_sum = recoveries[i].sum()
+        
+        # confirmed, deaths, recovered, and active
+        world_cases.append(confirmed_sum)
+        total_deaths.append(death_sum)
+        total_recovered.append(recovered_sum)
+        total_active.append(confirmed_sum-death_sum-recovered_sum)
+        
+        # calculate rates
+        mortality_rate.append(death_sum/confirmed_sum)
+        recovery_rate.append(recovered_sum/confirmed_sum)
 
 
     def daily_increase(data):
         d = [] 
-    for i in range(len(data)):
-        if i == 0:
-            d.append(data[0])
-        else:
-            d.append(data[i]-data[i-1])
-    return d 
+        for i in range(len(data)):
+            if i == 0:
+                d.append(data[0])
+            else:
+                d.append(data[i]-data[i-1])
+        return d 
 
-def moving_average(data, window_size):
-    moving_average = []
-    for i in range(len(data)):
-        if i + window_size < len(data):
-            moving_average.append(np.mean(data[i:i+window_size]))
-        else:
-            moving_average.append(np.mean(data[i:len(data)]))
-    return moving_average
+    def moving_average(data, window_size):
+        moving_average = []
+        for i in range(len(data)):
+            if i + window_size < len(data):
+                moving_average.append(np.mean(data[i:i+window_size]))
+            else:
+                moving_average.append(np.mean(data[i:len(data)]))
+        return moving_average
 
-# window size
-window = 7
+    # window size
+    window = 7
 
-# confirmed cases
-world_daily_increase = daily_increase(world_cases)
-world_confirmed_avg= moving_average(world_cases, window)
-world_daily_increase_avg = moving_average(world_daily_increase, window)
+    # confirmed cases
+    world_daily_increase = daily_increase(world_cases)
+    world_confirmed_avg= moving_average(world_cases, window)
+    world_daily_increase_avg = moving_average(world_daily_increase, window)
 
-# deaths
-world_daily_death = daily_increase(total_deaths)
-world_death_avg = moving_average(total_deaths, window)
-world_daily_death_avg = moving_average(world_daily_death, window)
-
-
-# recoveries
-world_daily_recovery = daily_increase(total_recovered)
-world_recovery_avg = moving_average(total_recovered, window)
-world_daily_recovery_avg = moving_average(world_daily_recovery, window)
+    # deaths
+    world_daily_death = daily_increase(total_deaths)
+    world_death_avg = moving_average(total_deaths, window)
+    world_daily_death_avg = moving_average(world_daily_death, window)
 
 
-# active 
-world_active_avg = moving_average(total_active, window)
+    # recoveries
+    world_daily_recovery = daily_increase(total_recovered)
+    world_recovery_avg = moving_average(total_recovered, window)
+    world_daily_recovery_avg = moving_average(world_daily_recovery, window)
 
 
-days_since_1_22 = np.array([i for i in range(len(dates))]).reshape(-1, 1)
-world_cases = np.array(world_cases).reshape(-1, 1)
-total_deaths = np.array(total_deaths).reshape(-1, 1)
-total_recovered = np.array(total_recovered).reshape(-1, 1)
+    # active 
+    world_active_avg = moving_average(total_active, window)
 
 
-days_in_future = 10
-future_forcast = np.array([i for i in range(len(dates)+days_in_future)]).reshape(-1, 1)
-adjusted_dates = future_forcast[:-10]
+    days_since_1_22 = np.array([i for i in range(len(dates))]).reshape(-1, 1)
+    world_cases = np.array(world_cases).reshape(-1, 1)
+    total_deaths = np.array(total_deaths).reshape(-1, 1)
+    total_recovered = np.array(total_recovered).reshape(-1, 1)
 
-start = '1/22/2020'
-start_date = datetime.datetime.strptime(start, '%m/%d/%Y')
-future_forcast_dates = []
-for i in range(len(future_forcast)):
-    future_forcast_dates.append((start_date + datetime.timedelta(days=i)).strftime('%m/%d/%Y'))
+
+    days_in_future = 10
+    future_forcast = np.array([i for i in range(len(dates)+days_in_future)]).reshape(-1, 1)
+    adjusted_dates = future_forcast[:-10]
+
+    start = '1/22/2020'
+    start_date = datetime.datetime.strptime(start, '%m/%d/%Y')
+    future_forcast_dates = []
+    for i in range(len(future_forcast)):
+        future_forcast_dates.append((start_date + datetime.timedelta(days=i)).strftime('%m/%d/%Y'))
 
     # slightly modify the data to fit the model better (regression models cannot pick the pattern)
-X_train_confirmed, X_test_confirmed, y_train_confirmed, y_test_confirmed = train_test_split(days_since_1_22[50:], world_cases[50:], test_size=0.02, shuffle=False) 
+    X_train_confirmed, X_test_confirmed, y_train_confirmed, y_test_confirmed = train_test_split(days_since_1_22[50:], world_cases[50:], test_size=0.02, shuffle=False) 
 
-# svm_confirmed = svm_search.best_estimator_
-svm_confirmed = SVR(shrinking=True, kernel='poly',gamma=0.01, epsilon=1,degree=3, C=0.1)
-svm_confirmed.fit(X_train_confirmed, y_train_confirmed)
-svm_pred = svm_confirmed.predict(future_forcast)
+    # svm_confirmed = svm_search.best_estimator_
+    svm_confirmed = SVR(shrinking=True, kernel='poly',gamma=0.01, epsilon=1,degree=3, C=0.1)
+    svm_confirmed.fit(X_train_confirmed, y_train_confirmed)
+    svm_pred = svm_confirmed.predict(future_forcast)
+
+    # check against testing data
+    svm_test_pred = svm_confirmed.predict(X_test_confirmed)
+
+    fig, ax = plt.subplots()
+    plt.plot(y_test_confirmed)
+    plt.plot(svm_test_pred)
+    plt.legend(['Test Data', 'SVM Predictions'])
+    fig.savefig("static/images/abc.png")
+
+    print('SVM MAE:', mean_absolute_error(svm_test_pred, y_test_confirmed))
+    print('SVM MSE:',mean_squared_error(svm_test_pred, y_test_confirmed))
+
+    # transform our data for polynomial regression
+    poly = PolynomialFeatures(degree=4)
+    poly_X_train_confirmed = poly.fit_transform(X_train_confirmed)
+    poly_X_test_confirmed = poly.fit_transform(X_test_confirmed)
+    poly_future_forcast = poly.fit_transform(future_forcast)
+
+    bayesian_poly = PolynomialFeatures(degree=5)
+    bayesian_poly_X_train_confirmed = bayesian_poly.fit_transform(X_train_confirmed)
+    bayesian_poly_X_test_confirmed = bayesian_poly.fit_transform(X_test_confirmed)
+    bayesian_poly_future_forcast = bayesian_poly.fit_transform(future_forcast)
+
+    # polynomial regression
+    linear_model = LinearRegression(normalize=True, fit_intercept=False)
+    linear_model.fit(poly_X_train_confirmed, y_train_confirmed)
+    test_linear_pred = linear_model.predict(poly_X_test_confirmed)
+    linear_pred = linear_model.predict(poly_future_forcast)
+    print('MAE:', mean_absolute_error(test_linear_pred, y_test_confirmed))
+    print('MSE:',mean_squared_error(test_linear_pred, y_test_confirmed))
+
+    print(linear_model.coef_)
+
+    
+    fig, ax = plt.subplots()
+    plt.plot(y_test_confirmed)
+    plt.plot(test_linear_pred)
+    plt.legend(['Test Data', 'Polynomial Regression Predictions'])
+    fig.savefig("static/images/bcd.png")
+
+    # bayesian ridge polynomial regression
+    tol = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
+    alpha_1 = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3]
+    alpha_2 = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3]
+    lambda_1 = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3]
+    lambda_2 = [1e-7, 1e-6, 1e-5, 1e-4, 1e-3]
+    normalize = [True, False]
+
+    bayesian_grid = {'tol': tol, 'alpha_1': alpha_1, 'alpha_2' : alpha_2, 'lambda_1': lambda_1, 'lambda_2' : lambda_2, 
+                    'normalize' : normalize}
+
+    bayesian = BayesianRidge(fit_intercept=False)
+    bayesian_search = RandomizedSearchCV(bayesian, bayesian_grid, scoring='neg_mean_squared_error', cv=3, return_train_score=True, n_jobs=-1, n_iter=40, verbose=1)
+    bayesian_search.fit(bayesian_poly_X_train_confirmed, y_train_confirmed)
+
+    bayesian_search.best_params_
+
+    bayesian_confirmed = bayesian_search.best_estimator_
+    test_bayesian_pred = bayesian_confirmed.predict(bayesian_poly_X_test_confirmed)
+    bayesian_pred = bayesian_confirmed.predict(bayesian_poly_future_forcast)
+    print('MAE:', mean_absolute_error(test_bayesian_pred, y_test_confirmed))
+    print('MSE:',mean_squared_error(test_bayesian_pred, y_test_confirmed))
+
+    fig, ax = plt.subplots()
+    plt.plot(y_test_confirmed)
+    plt.plot(test_bayesian_pred)
+    plt.legend(['Test Data', 'Bayesian Ridge Polynomial Predictions'])
+    fig.savefig("static/images/cde.png")
+
+    # def country_plot(x, y1, y2, y3,y4, country):
+    #     # window is set as 14 in in the beginning of the notebook 
+    #     confirmed_avg = moving_average(y1, window)
+    #     confirmed_increase_avg = moving_average(y2, window)
+    #     death_increase_avg = moving_average(y3, window)
+    #     recovery_increase_avg = moving_average(y4, window)
+        
+       
+    #     fig, ax = plt.subplots()
+    #     plt.figure(figsize=(16, 10))
+    #     plt.plot(x, y1)
+    #     plt.plot(x, confirmed_avg, color='red', linestyle='dashed')
+    #     plt.legend(['{} Confirmed Cases'.format(country), 'Moving Average {} Days'.format(window)], prop={'size': 20})
+    #     plt.title('{} Confirmed Cases'.format(country), size=30)
+    #     plt.xlabel('Days Since 1/22/2020', size=30)
+    #     plt.ylabel('# of Cases', size=30)
+    #     plt.xticks(size=20)
+    #     plt.yticks(size=20)
+    #     plt.show()
+
+    #     fig.savefig("static/images/efc.png")
+
+       
+    # def get_country_info(country_name):
+    #     country_cases = []
+    #     country_deaths = []
+    #     country_recoveries = []  
+        
+    #     for i in dates:
+    #         country_cases.append(confirmed_df[confirmed_df['Country/Region']==country_name][i].sum())
+    #         country_deaths.append(deaths_df[deaths_df['Country/Region']==country_name][i].sum())
+    #         country_recoveries.append(recoveries_df[recoveries_df['Country/Region']==country_name][i].sum())
+    #     return (country_cases, country_deaths,country_recoveries)
 
 
-# check against testing data
-svm_test_pred = svm_confirmed.predict(X_test_confirmed)
-plt.plot(y_test_confirmed)
-plt.plot(svm_test_pred)
-plt.legend(['Test Data', 'SVM Predictions'])
-print('MAE:', mean_absolute_error(svm_test_pred, y_test_confirmed))
-print('MSE:',mean_squared_error(svm_test_pred, y_test_confirmed))
+    # def country_visualizations(country_name):
+    #     country_info = get_country_info(country_name)
+    #     country_cases = country_info[0]
+    #     country_deaths = country_info[1]
+    #     country_recoveries= country_info[2]
+        
+    #     country_daily_increase = daily_increase(country_cases)
+    #     country_daily_death = daily_increase(country_deaths)
+    #     country_daily_recovery = daily_increase(country_recoveries)
+        
+    #     country_plot(adjusted_dates, country_cases, country_daily_increase, country_daily_death,country_daily_recovery, country_name)
+        
+    # country_visualizations('India')
+    
 
     return render(request, 'predict.html')
      

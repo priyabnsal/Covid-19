@@ -1,0 +1,27 @@
+{%extends 'base.html'%} {%block title%} World | {%endblock title%} 
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css"
+  rel="stylesheet"
+/>
+<link href="/static/1css/dark.css" rel="stylesheet" />
+{%block body%}
+
+<div class="flexbox">
+  {% comment %} <div id="chartdiv"></div> {% endcomment %}
+  <div id="map" style="width: 100vw; height: 100vh"></div>
+  <div id="list">
+    <table id="areas" class="compact hover order-column row-border">
+      <thead>
+        <tr>
+          <th>Country/State</th>
+          <th>Confirmed</th>
+          <th>Deaths</th>
+          <th>Recovered</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+<script src="static/js/app.js"></script>
+{%endblock body%}

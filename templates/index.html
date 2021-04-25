@@ -1,6 +1,5 @@
 {%extends 'base.html'%} {%block title%} Home | {%endblock title%} {%block body%}
-<!-- <p>Welcome {{ request.user}}</p>
-<a href="/logoutUser">logout</a> -->
+
 <div class="container-fluid px-0">
   <div
     id="carouselExampleIndicators"
@@ -18,15 +17,26 @@
     </ol>
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img class="d-block w-100" src="/static/img/4.jpg" alt="First slide" />
-      </div>
-      <div class="carousel-item">
-        <img class="d-block w-100" src="/static/img/5.jpg" alt="Second slide" />
+        <img
+          style="height: 550px; width: 100%"
+          class="d-block w-100"
+          src="/static/images/c1.png"
+          alt="First slide"
+        />
       </div>
       <div class="carousel-item">
         <img
+          style="height: 550px; width: 100%"
           class="d-block w-100"
-          src="https://source.unsplash.com/1600x600/?tech"
+          src="/static/images/c4.jpg"
+          alt="Second slide"
+        />
+      </div>
+      <div class="carousel-item">
+        <img
+          style="height: 550px; width: 100%"
+          class="d-block w-100"
+          src="/static/images/c3.jpg"
           alt="Third slide"
         />
       </div>
@@ -52,135 +62,194 @@
   </div>
 </div>
 
-<!-- <section class="container my-4">
-  <h2 class="text-center mb-5">Services</h2>
-  <div class="row">
-    <div class="card col-3 mx-auto" style="width: 18rem">
-      <img class="card-img-top" src="/static/img/1.jpg" alt="Card image cap" />
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+<section class="container my-4 py-4" >
+  <h2>Coronavirus</h2>
+  <div id="accordion" class="accordion my-4">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h2 class="clearfix mb-0">
+							<a class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-chevron-circle-down"></i> Overview</a>	
+        </h2>
+      </div>
+      <div id="collapseOne" class="collapse show" data-parent="#accordion">
+        <div class="card-body">
+          Coronavirus disease (COVID-19) is an infectious disease caused by a
+          newly discovered coronavirus. Most people infected with the COVID-19
+          virus will experience mild to moderate respiratory illness and recover
+          without requiring special treatment. Older people, and those with
+          underlying medical problems like cardiovascular disease, diabetes,
+          chronic respiratory disease, and cancer are more likely to develop
+          serious illness. The best way to prevent and slow down transmission is
+          to be well informed about the COVID-19 virus, the disease it causes
+          and how it spreads. Protect yourself and others from infection by
+          washing your hands or using an alcohol based rub frequently and not
+          touching your face. The COVID-19 virus spreads primarily through
+          droplets of saliva or discharge from the nose when an infected person
+          coughs or sneezes, so it’s important that you also practice
+          respiratory etiquette (for example, by coughing into a flexed elbow).
+        </div>
       </div>
     </div>
-    <div class="card col-3 mx-auto" style="width: 18rem">
-      <img class="card-img-top" src="/static/img/1.jpg" alt="Card image cap" />
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-    <div class="card col-3 mx-auto" style="width: 18rem">
-      <img class="card-img-top" src="/static/img/1.jpg" alt="Card image cap" />
-      <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-      </div>
-    </div>
-  </div>
-</section> -->
 
-<div class="container my-4">
-  <h2 class="text-center mb-5">Services</h2>
-  <div class="row">
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img
-          class="card-img-top"
-          data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
-          alt="Thumbnail [100%x225]"
-          style="height: 225px; width: 100%; display: block"
-          src="/static/img/1.jpg"
-          data-holder-rendered="true"
-        />
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h2 class="mb-0">
+							<a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"><i class="fa fa-chevron-circle-down"></i> Prevention</a>	
+        </h2>
+      </div>
+      <div id="collapseTwo" class="collapse" data-parent="#accordion">
         <div class="card-body">
-          <p class="card-text">
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
+          To prevent infection and to slow transmission of COVID-19, do the
+          following:
+          <p>
+            <li>
+              Wash your hands regularly with soap and water, or clean them with
+              alcohol-based hand rub.
+            </li>
+            <li>
+              Maintain at least 1 metre distance between you and people coughing
+              or sneezing.
+            </li>
+            <li>Avoid touching your face.</li>
+            <li>Cover your mouth and nose when coughing or sneezing.</li>
+            <li>Stay home if you feel unwell.</li>
+            <li>
+              Refrain from smoking and other activities that weaken the lungs.
+            </li>
+            <li>
+              Practice physical distancing by avoiding unnecessary travel and
+              staying away from large groups of people.
+            </li>
           </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                View
-              </button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                Edit
-              </button>
-            </div>
-            <small class="text-muted">9 mins</small>
-          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img
-          class="card-img-top"
-          data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
-          alt="Thumbnail [100%x225]"
-          src="/static/img/2.jpg"
-          data-holder-rendered="true"
-          style="height: 225px; width: 100%; display: block"
-        />
-        <div class="card-body">
-          <p class="card-text">
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                View
-              </button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                Edit
-              </button>
-            </div>
-            <small class="text-muted">9 mins</small>
-          </div>
-        </div>
+
+    <div class="card">
+      <div class="card-header" id="headingThree">
+      <h2 class="mb-0">
+							<a class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"><i class="fa fa-chevron-circle-down"></i> Symptoms</a>	
+        </h2>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card mb-4 box-shadow">
-        <img
-          class="card-img-top"
-          data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
-          alt="Thumbnail [100%x225]"
-          src="/static/img/4.jpg"
-          data-holder-rendered="true"
-          style="height: 225px; width: 100%; display: block"
-        />
+      <div id="collapseThree" class="collapse" data-parent="#accordion">
         <div class="card-body">
-          <p class="card-text">
-            This is a wider card with supporting text below as a natural lead-in
-            to additional content. This content is a little bit longer.
-          </p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                View
-              </button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                Edit
-              </button>
-            </div>
-            <small class="text-muted">9 mins</small>
+          <div class="sf_colsIn">
+            <p>
+              COVID-19 affects different people in different ways. Most infected
+              people will develop mild to moderate illness and recover without
+              hospitalization.
+            </p>
+            <p>Most common symptoms:</p>
+            <ul>
+              <li>fever.</li>
+              <li>dry cough.</li>
+              <li>tiredness.</li>
+            </ul>
+            <p>Less common symptoms:</p>
+            <ul>
+              <li>aches and pains.</li>
+              <li>sore throat.</li>
+              <li>diarrhoea.</li>
+              <li>conjunctivitis.</li>
+              <li>headache.</li>
+              <li>loss of taste or smell.</li>
+              <li>a rash on skin, or discolouration of fingers or toes.</li>
+            </ul>
+            <p>Serious symptoms:</p>
+            <ul>
+              <li>difficulty breathing or shortness of breath.</li>
+              <li>chest pain or pressure.</li>
+              <li>loss of speech or movement.</li>
+            </ul>
+            <p>
+              Seek immediate medical attention if you have serious
+              symptoms.&nbsp; Always call before visiting your doctor or health
+              facility.
+            </p>
+            <p>
+              People with mild symptoms who are otherwise healthy should manage
+              their symptoms at home.&nbsp;
+            </p>
+            <p>
+              On average it takes 5&ndash;6 days from when someone is infected
+              with the virus for symptoms to show, however it can take up to 14
+              days.
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-{%endblock body%}
+</section>
+
+<section class="container my-4">
+    <h2 class="text-center mb-5">Check For...</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+        <a href="/d3js">
+            <img
+              class="card-img-top"
+              data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+              alt="Thumbnail [100%x225]"
+              style="height: 225px; width: 100%; display: block"
+              src="/static/images/c1.png"
+              data-holder-rendered="true"
+            />
+            <div class="card-body">
+              <p class="card-text">World</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+          <img
+            class="card-img-top"
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+            alt="Thumbnail [100%x225]"
+            src="/static/img/2.jpg"
+            data-holder-rendered="true"
+            style="height: 225px; width: 100%; display: block"
+          />
+          <div class="card-body">
+            <p class="card-text">India</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+          <img
+            class="card-img-top"
+            data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail"
+            alt="Thumbnail [100%x225]"
+            src="/static/img/4.jpg"
+            data-holder-rendered="true"
+            style="height: 225px; width: 100%; display: block"
+          />
+          <div class="card-body">
+            <p class="card-text">
+              Predication
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+  <script>
+$(document).ready(function(){
+	// Add minus icon for collapse element which is open by default
+	$(".collapse.show").each(function(){
+		$(this).prev(".card-header").addClass("highlight");
+	});
+	
+	// Highlight open collapsed element 
+	$(".card-header .btn").click(function(){
+		$(".card-header").not($(this).parents()).removeClass("highlight");
+		$(this).parents(".card-header").toggleClass("highlight");
+	});
+});
+</script>
+
+  {%endblock body%}

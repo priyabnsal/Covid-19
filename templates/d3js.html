@@ -3,10 +3,27 @@
   href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css"
   rel="stylesheet"
 />
+<link href="/static/1css/dark.css" rel="stylesheet" />
 
 {%block body%}
-<div id="map" style="width: 100vw; height: 100vh"></div>
 
+<div class="flexbox">
+  <div id="map" style="width: 100vw; height: 100vh"></div>
+  {% comment %} <div id="chartdiv"></div> {% endcomment %}
+  <div id="list">
+    <table id="areas" class="compact hover order-column row-border">
+      <thead>
+        <tr>
+          <th>Country/State</th>
+          <th>Confirmed</th>
+          <th>Deaths</th>
+          <th>Recovered</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
 <script>
   mapboxgl.accessToken =
@@ -18,6 +35,13 @@
     center: [0, 20],
   });
 </script>
+<script>
+var buttonsAndChartContainer = container.createChild(am4core.Container);
+  buttonsAndChartContainer.layout = "vertical";
+  buttonsAndChartContainer.height = am4core.percent(45);
+  buttonsAndChartContainer.width = am4core.percent(100);
+  buttonsAndChartContainer.valign = "bottom";
 
+</script>
 <script src="/static/js/index.js"></script>
 {%endblock body%}

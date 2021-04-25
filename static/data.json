@@ -3547,16 +3547,16 @@
     },
     {
       "id": "hqwsh1rmvkWI3LFUVuMk",
-      "infected": 36,
-      "recovered": 6,
+      "infected": 36000,
+      "recovered": 15556,
       "latitude": 28.7041,
       "pop": 18980000,
       "longitude": 77.1025,
       "name": "Delhi",
       "country": "IN",
       "lastUpdated": "2020-03-27T08:26:07.197Z",
-      "dead": 1,
-      "sick": 29
+      "dead": 1555,
+      "sick": 295595
     },
     {
       "lastUpdated": "2020-03-27T00:46:55.387Z",
