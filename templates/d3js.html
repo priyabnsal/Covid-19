@@ -6,6 +6,7 @@
 <link href="/static/1css/dark.css" rel="stylesheet" />
 
 {%block body%}
+<script src="/static/js/index.js"></script>
 
 <div class="flexbox">
   <div id="map" style="width: 100vw; height: 100vh"></div>
@@ -53,7 +54,7 @@
       crossorigin="anonymous"
     ></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
+{% comment %} <script>
     function fetch(){
       $.get("https://api.covid19api.com/summary",
       function(data){
@@ -95,7 +96,7 @@
       }
       );
     }
-</script>
+</script> {% endcomment %}
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
 <script>
   mapboxgl.accessToken =
@@ -115,7 +116,5 @@ var buttonsAndChartContainer = container.createChild(am4core.Container);
   buttonsAndChartContainer.valign = "bottom";
 
 </script>
-<script src="/static/js/index.js"></script>
-
 
 {%endblock body%}

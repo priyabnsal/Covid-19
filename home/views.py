@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 
-
+import json
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import numpy as np 
 import matplotlib.pyplot as plt, mpld3
 import matplotlib.pyplot as plt
-
+from matplotlib.pyplot import figure
 import matplotlib.colors as mcolors
 import pandas as pd 
 import random
@@ -269,13 +269,18 @@ def predict(request):
 
     # check against testing data
     svm_test_pred = svm_confirmed.predict(X_test_confirmed)
-
+    # figure(figsize=(8, 6), dpi=80)
+    # fig = matplotlib.pyplot.gcf()
+    # fig.set_size_inches(18.5, 10.5)
+    
     fig, ax = plt.subplots()
     plt.plot(y_test_confirmed)
     plt.plot(svm_test_pred)
+    # plt.figure(figsize=(2, 2))
     plt.legend(['Test Data', 'SVM Predictions'])
-    fig.savefig("static/images/abc.png")
+    fig.savefig("static/images/abc.png",dpi = 70)
 
+   
     print('SVM MAE:', mean_absolute_error(svm_test_pred, y_test_confirmed))
     print('SVM MSE:',mean_squared_error(svm_test_pred, y_test_confirmed))
 
@@ -305,7 +310,7 @@ def predict(request):
     plt.plot(y_test_confirmed)
     plt.plot(test_linear_pred)
     plt.legend(['Test Data', 'Polynomial Regression Predictions'])
-    fig.savefig("static/images/bcd.png")
+    fig.savefig("static/images/bcd.png",dpi = 70)
 
     # bayesian ridge polynomial regression
     tol = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2]
@@ -334,7 +339,7 @@ def predict(request):
     plt.plot(y_test_confirmed)
     plt.plot(test_bayesian_pred)
     plt.legend(['Test Data', 'Bayesian Ridge Polynomial Predictions'])
-    fig.savefig("static/images/cde.png")
+    fig.savefig("static/images/cde.png",dpi = 70)
 
     # def country_plot(x, y1, y2, y3,y4, country):
     #     # window is set as 14 in in the beginning of the notebook 
@@ -388,6 +393,19 @@ def predict(request):
     # Future predictions using SVM 
     svm_df = pd.DataFrame({'Date': future_forcast_dates[-10:], 'SVM Predicted # of Confirmed Cases Worldwide': np.round(svm_pred[-10:])})
     svm_df.style.background_gradient(cmap='Reds')
-    return render(request, 'predict.html')
+    svm_df = svm_df.to_html(classes='mystyle')
+
+    # Future predictions using polynomial regression
+    linear_pred = linear_pred.reshape(1,-1)[0]
+    linear_df = pd.DataFrame({'Date': future_forcast_dates[-10:], 'Polynomial Predicted # of Confirmed Cases Worldwide': np.round(linear_pred[-10:])})
+    linear_df.style.background_gradient(cmap='Reds')
+    linear_df = linear_df.to_html()
+
+    bayesian_df = pd.DataFrame({'Date': future_forcast_dates[-10:], 'Bayesian Ridge Predicted # of Confirmed Cases Worldwide': np.round(bayesian_pred[-10:])})
+    bayesian_df.style.background_gradient(cmap='Reds')
+    bayesian_df = bayesian_df.to_html()
+# "tbb": linear_df,
+    data = {'table': svm_df, 'tbb': linear_df,'tbl': bayesian_df}
+    return render(request, 'predict.html', data)
      
 

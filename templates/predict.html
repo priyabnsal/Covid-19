@@ -1,24 +1,91 @@
 {%extends 'base.html'%} {%block title%} predict | {%endblock title%} 
 {%block body%}
 
-<div class="container-fluid my-4 mx-4">
-<h1 class="">Covid-19 Future Prediction</h1>
-  <div class="row">
+<div class="container-fluid mx-auto my-4">
+<h2 class="mb-4">Covid-19 Future Prediction</h2>
+  <div class="row ">
     <div class="col-md-4 ">
+    <h5>SVM</h5>
       <img src="static/images/abc.png" />
     </div>
     <div class="col-md-4 ">
+    <h5>Polynomial</h5>
       <img src="static/images/bcd.png" />
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 ">
+    <h5>Bayesian</h5>
   <img src="static/images/cde.png" />
     </div>
-    <div class="col-md-4">
-  {% comment %} <img src="static/images/efc.png" /> {% endcomment %}
-    </div>
-  </div>
+    
+
+  <!-- <div class="container-fluid table-responsive my-4">
+    <h5 class="text-center text-uppercase"> Covid-19 Live Tracker World</h5>
+    <table class="table table-bordered table-striped text-center">
+      {% comment %} <h1>Data for Frame</h1>  {% endcomment %}
+	      <tr> 
+          {% for data in svm_df %} 
+            <th>{{ data }}</th> 
+          {% endfor %} 
+        </tr>
+        {% for _, record in svm_df.iterrows %} 
+          <tr> 
+              {% for value in data %} 
+                <td>{{ value }}</td> 
+              {% endfor %} 
+          </tr> 
+		    {% endfor %} 
+    </table>
+     </div>
+  </div> -->
   
+  </div>
 
+
+<!-- <div class="container my-4">
+  <div class="text-center bg-primary my-3">{{ table|safe }}</div>
+  <div class="text-center bg-primary my-3">{{ tbb|safe }}</div>
+  <div class="text-center bg-primary my-3">{{ tbl|safe }}</div>
+</div> -->
+<div class="row my-4">
+     <div class="col-md-4">
+   <div class="container table-responsive my-4">
+    <h5 class="text-center text-uppercase"> SVM Predicted</h5>
+    <table class="table table-bordered table-primary text-center">
+      <tr>  
+      </tr> 
+      <tr>  
+        <td>{{ table|safe }}</td> 
+      </tr> 
+    </table>
+  </div>
+  </div>
+     <div class="col-md-4">
+
+  <div class="container table-responsive my-4">
+
+    <h5 class="text-center text-uppercase">Polynomial Predicted</h5>
+    <table class="table table-bordered table-primary text-center">
+      <tr>  
+          </tr> 
+          <tr>  
+            <td>{{ tbb|safe }}</td> 
+          </tr> 
+    </table>
+  </div>
+  </div>
+     <div class="col-md-4">
+
+  <div class="container table-responsive my-4">
+    <h5 class="text-center text-uppercase">Bayesian Ridge Predicted </h5>
+    <table class="table table-bordered table-primary text-center">
+      <tr>  
+          </tr> 
+          <tr>  
+            <td>{{ tbl|safe }}</td> 
+          </tr> 
+    </table>
+  </div>
+  </div>
 </div>
-
+{% comment %} {{table|safe}} {% endcomment %}
 {%endblock body%}
