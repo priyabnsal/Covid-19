@@ -9,7 +9,7 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-
+<script script src="/static/js/index.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
 
@@ -23,7 +23,7 @@
       style="background-color: #e3f2fd"
       class="navbar navbar-expand-lg navbar-light"
     >
-      <a class="navbar-brand" href="/">Logo</a>
+      <a class="navbar-brand" href="/">Covid-19</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -46,138 +46,117 @@
             <a class="nav-link" href="/about">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/d3js">World</a>
+            <a class="nav-link" href="/d3js">Map Prediction</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/greetings">India</a>
+            <a class="nav-link" href="/world">World Live Tracker</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/greetings">India Live Tracker</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/predict">Predict</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/symptoms">Symptoms</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href=""
-              id="navbarDropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Services
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="/services">World Map</a>
-              <a class="dropdown-item" href="/greetings">India</a>
-              <a class="dropdown-item" href="#">SIR Model</a>
-            </div>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/world">World</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/contact">Contact Us</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">LogOut</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#"> Hi {{ user.username }}!</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Log In</a>
-          </li>
+          
         </ul>
       </div>
     </nav>
-<div class="container my-4" >
-  <div class="row">
-    <div class="col-xl-3 col-md-3 mb-4">
-      <div class="card border-left-info shadow h-100 py-2">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Confirmed</div>
-              <div class="row no-gutters align-items-center">
-                <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="box"></div>
+    
+  <div class="container my-4" >
+    <div class="row">
+      <div class="col-xl-3 col-md-3 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2 my-4 mx-3">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1 ">Total Confirmed</div>
+                <div class="row no-gutters align-items-center">
+                  <div class="col-auto">
+                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="box"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-auto">
-              <i class="fa fa-users fa-2x text-info"></i>
+              <div class="col-auto">
+                <i class="fa fa-users fa-2x text-info"></i>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+        <div class="col-xl-3 col-md-3 mb-4">
+          <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Death</div>
+                    <div class="row no-gutters align-items-center">
+                      <div class="col-auto">
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id='td'></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fa fa-bed fa-2x text-danger"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
       <div class="col-xl-3 col-md-3 mb-4">
-        <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card border-left-success shadow h-100 py-2">
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Total Death</div>
-                  <div class="row no-gutters align-items-center">
-                    <div class="col-auto">
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id='td'></div>
-                    </div>
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Recovered</div>
+                <div class="row no-gutters align-items-center">
+                  <div class="col-auto">
+                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="tr"></div>
                   </div>
                 </div>
-                <div class="col-auto">
-                  <i class="fa fa-bed fa-2x text-danger"></i>
-                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fa fa-child fa-2x text-success"></i>
               </div>
             </div>
           </div>
         </div>
       </div>
-    <div class="col-xl-3 col-md-3 mb-4">
-      <div class="card border-left-success shadow h-100 py-2">
-        <div class="card-body">
-          <div class="row no-gutters align-items-center">
-            <div class="col mr-2">
-              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Recovered</div>
-              <div class="row no-gutters align-items-center">
-                <div class="col-auto">
-                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="tr"></div>
-                </div>
+      <div class="col-xl-3 col-md-3 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">New Confirmed</div>
+                  <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"id="nc"></div>
+                    </div>                                       
+                  </div>
               </div>
-            </div>
-            <div class="col-auto">
-              <i class="fa fa-child fa-2x text-success"></i>
+                      <div class="col-auto">
+                      <i class="fa fa-bell fa-2x text-warning"></i>
+                      </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-xl-3 col-md-3 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">New Confirmed</div>
-                                            <div class="row no-gutters align-items-center">
-                                            <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"id="nc"></div>
-                                                </div>
-                                                                                                
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa fa-bell fa-2x text-warning"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-    </div>             
-</div>
-</div>
+      </div>             
+  </div>
+  </div>
+
+
     <div class="container-fluid table-responsive my-4">
       <h3 class="text-center text-uppercase"> Covid-19 Live Tracker World</h3>
+      <div class="container text-center">
+        <!-- <h3 class="text-center text-uppercase">Covid-19 Live Tracker India Statewise</h3> -->
+<input 
+      style="width: 50%;"
+      class="form-control mx-auto border border-primary my-3"
+      id="myInput"
+      onkeyup="myFunction()"
+      type="search"
+      name="search_text"
+      placeholder="Type any Country Name..."
+      aria-label="Search"
+    />
+      </div>
       <table class="table table-bordered table-striped text-center" id="tbval">
         <tr>
           <th>Country</th>
@@ -190,9 +169,7 @@
       </table>
     </div>
 
-    {% comment %}
-    <div class="preloader"></div>
-    {% endcomment %}
+   
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -259,6 +236,29 @@
       );
     }
 </script>
+<script>
+      function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tbval");
+        tr = table.getElementsByTagName("tr");
 
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
+          }
+        }
+      }
+    </script>
+    
   </body>
 </html>

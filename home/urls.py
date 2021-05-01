@@ -11,14 +11,14 @@ urlpatterns = [
     path('search', views.search),
 
     path('about', views.about, name='about'),
-    path('services', views.services, name='services'),
+    # path('services', views.services, name='services'),
     path('contact', views.contact, name='contact'),
     path('login', views.loginuser, name='login'),
     path('logout', views.logoutuser, name='logout'),
     path('d3js', views.d3js, name='d3js'),
     path('predict', views.predict, name='predict'),
     path('world', views.world, name='world'),
-    path('symptoms', views.symptoms, name='symptoms'),
+    # path('symptoms', views.symptoms, name='symptoms'),
 
 
      

@@ -6,13 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 
 import json
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
+# from selenium import webdriver
+# from webdriver_manager.chrome import ChromeDriverManager
+# from selenium.webdriver.common.by import By
 import matplotlib.pyplot as plt
-# %matplotlib inline
-# import pandas as pd
-# import time
 
 import numpy as np 
 import matplotlib.pyplot as plt, mpld3
@@ -30,6 +27,7 @@ from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import datetime
 import operator 
+
 # plt.style.use('fivethirtyeight')
 # %matplotlib inline
 from IPython.display import set_matplotlib_formats
@@ -130,8 +128,6 @@ def logoutuser(request):
         logout(request)
         return redirect('/login')
 
-
-
 def services(request):
     if request.user.is_anonymous:
         return redirect('/login')
@@ -152,9 +148,7 @@ def d3js(request):
     return render(request,'d3js.html')
 def world(request):
     return render(request,'world.html')
-def symptoms(request):
-    return render(request,'symptoms.html')
-    
+
 
 def predict(request):
     plt.style.use('fivethirtyeight')
@@ -166,6 +160,9 @@ def predict(request):
     recoveries_df = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv')
     latest_data = pd.read_csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/03-11-2021.csv')
     
+   
+
+
     latest_data.head()
     confirmed_df.head()
     print(latest_data.head())

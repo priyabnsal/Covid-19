@@ -3,15 +3,15 @@
   href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css"
   rel="stylesheet"
 />
-<link href="/static/1css/dark.css" rel="stylesheet" />
+{% comment %} <link href="/static/1css/dark.css" rel="stylesheet" /> {% endcomment %}
 
 {%block body%}
 <script src="/static/js/index.js"></script>
-
-<div class="flexbox">
   <div id="map" style="width: 100vw; height: 100vh"></div>
+
+{% comment %} <div class="flexbox"> {% endcomment %}
   {% comment %} <div id="chartdiv"></div> {% endcomment %}
-  <div id="list"  >
+  {% comment %} <div id="list"  > {% endcomment %}
     {% comment %} <table id="areas" class="compact hover order-column row-border">
       <thead>
         <tr>
@@ -25,7 +25,7 @@
     </table> {% endcomment %}
     {% comment %} <div class="container-fluid table-responsive my-4"> {% endcomment %}
       {% comment %} <h3 class="text-center text-uppercase"> Covid-19 Live Tracker World</h3> {% endcomment %}
-      <table class="compact hover order-column row-border" id="tbval">
+      {% comment %} <table class="compact hover order-column row-border" id="tbval">
         <tr>
           <th>Country</th>
           <th>Total Confirmed</th>
@@ -34,10 +34,10 @@
           <th>New Recovered</th>
           <th>New Deaths</th>
         </tr>
-      </table>
+      </table> {% endcomment %}
     {% comment %} </div> {% endcomment %}
-  </div>
-</div>
+  {% comment %} </div> {% endcomment %}
+{% comment %} </div> {% endcomment %}
 <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
